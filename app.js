@@ -8,6 +8,44 @@ const ALLOWED_MINUTES = [15, 30, 45, 60, 120];
 const QR_PREFIX = "LIBORA-SEAT-";           // what each seat's QR code encodes
 
 const currentUser = () => localStorage.getItem("liboraUser");
+const COOLDOWN_MS = 15 * 60 * 1000;
+
+async function getFirebaseUser() {
+    const currentUser = firebase.auth().currentUser;
+
+    if (currentUser) {
+        return currentUser;
+    }
+
+    return new Promise((resolve) => {
+        const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+            unsubscribe();
+            resolve(user);
+        });
+    });
+}
+
+async function getReservationCooldown() {
+    const user =await getFirebaseUser();
+
+    if (!user) {
+        return 0;
+    }
+
+    const doc = await db.collection("users").doc(user.uid).get();
+
+    if (!doc.exists) {
+        return 0;
+    }
+
+    const data = doc.data();
+
+    if (!data.blockedUntil) {
+        return 0;
+    }
+
+    return data.blockedUntil.toMillis();
+}
 let arrivalInterval = null;
 let unsubscribeSeats = null;                // stops the realtime listener when leaving the page
 let qrScanner = null;                       // the active Html5Qrcode instance, if scanning
@@ -45,27 +83,40 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
-            // Get registered accounts
-            const accounts =
-                JSON.parse(localStorage.getItem("liboraAccounts")) || [];
+            // Login using Firebase Authentication
+            firebase.auth().signInWithEmailAndPassword(email, password)
+             .then((userCredential) => {
+                 const user = userCredential.user;
 
-            // Find matching account
-            const account = accounts.find(function (user) {
-                return user.email === email && user.password === password;
-            });
+                // Check if email has been verified
+                if (!user.emailVerified) {
 
-            if (!account) {
-                alert("Invalid email or password.");
-                return;
-            }
+                    alert("Please verify your email before logging in. Check your inbox.");
 
-            // Login successful
-            localStorage.setItem("liboraUser", account.email);
-            localStorage.setItem("liboraUserName", account.name);
+                    firebase.auth().signOut();
 
-            alert("Login successful!");
+                    return;
+                }
 
-            window.location.href = "dashboard.html";
+    localStorage.setItem("liboraUser", user.email);
+
+                alert("Login successful!");
+
+                window.location.href = "dashboard.html";
+            })
+            .catch((error) => {
+                console.error("Login error:", error);
+                if (error.code === "auth/invalid-credential") {
+                    alert("Invalid email or password.");
+                    } else if (error.code === "auth/user-not-found") {
+                        alert("No account found with this email.");
+                        } else if (error.code === "auth/wrong-password") {
+                            alert("Incorrect password.");
+                            } else {
+                                alert("Login failed: " + error.message);
+                            }
+
+                        })
         });
     }
         // DASHBOARD
@@ -205,6 +256,23 @@ function updateSeatCounts(seats) {
 // =====================================================
 
 async function reserveSeat(seatNumber) {
+
+    const blockedUntil = await getReservationCooldown();
+
+    if (blockedUntil > Date.now()) {
+        const remainingMinutes = Math.ceil(
+            (blockedUntil - Date.now()) / 60000
+        );
+
+        alert(
+            "You cannot reserve a seat right now.\n\n" +
+            "Please wait " + remainingMinutes +
+            " minute(s) before reserving again."
+        );
+
+        return;
+    }
+
     if (!confirm("Do you want to reserve Seat " + seatNumber + "?")) return;
 
     const ref = db.collection("seats").doc(String(seatNumber));
@@ -408,8 +476,31 @@ async function releaseSeat() {
 }
 
 async function cancelReservation() {
+
     await releaseSeat();
-    alert("Your 10-minute reservation has expired.\n\nThe seat is now available again.");
+
+    const user = await getFirebaseUser();
+
+    if (user) {
+        const blockedUntil =
+            firebase.firestore.Timestamp.fromMillis(
+                Date.now() + COOLDOWN_MS
+            );
+
+        await db.collection("users").doc(user.uid).set(
+            {
+                blockedUntil: blockedUntil
+            },
+            { merge: true }
+        );
+    }
+
+    alert(
+        "Your 10-minute reservation has expired.\n\n" +
+        "The seat is now available again.\n\n" +
+        "You cannot reserve another seat for the next 15 minutes."
+    );
+
     window.location.href = "dashboard.html";
 }
 
@@ -590,6 +681,63 @@ function showLogin() {
 
     document.getElementById("loginSection").style.display = "block";
 }
+function showForgotPassword() {
+
+    document.getElementById("loginSection").style.display = "none";
+
+    document.getElementById("registerSection").style.display = "none";
+
+    document.getElementById("forgotPasswordSection").style.display = "block";
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const forgotPasswordForm =
+        document.getElementById("forgotPasswordForm");
+
+    if (!forgotPasswordForm) return;
+
+    forgotPasswordForm.addEventListener("submit", function (event) {
+
+        event.preventDefault();
+
+        const email =
+            document.getElementById("forgotEmail").value.trim().toLowerCase();
+
+        if (email === "") {
+            alert("Please enter your email address.");
+            return;
+        }
+
+        firebase.auth().sendPasswordResetEmail(email)
+            .then(() => {
+
+                alert(
+                    "Password reset link has been sent to your email."
+                );
+
+                forgotPasswordForm.reset();
+
+                showLogin();
+
+            })
+            .catch((error) => {
+
+                console.error("Password reset error:", error);
+
+                if (error.code === "auth/user-not-found") {
+                    alert("No account found with this email.");
+                } else if (error.code === "auth/invalid-email") {
+                    alert("Please enter a valid email address.");
+                } else {
+                    alert("Could not send reset email. Please try again.");
+                }
+
+            });
+
+    });
+
+});
 
 
 // =====================================================
@@ -628,59 +776,48 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
 
-        // Get existing accounts
-        const accounts =
-            JSON.parse(localStorage.getItem("liboraAccounts")) || [];
+        // Create account using Firebase Authentication
+     firebase.auth().createUserWithEmailAndPassword(email, password)
+     .then((userCredential) => {
+         const user = userCredential.user;
 
+    // Send email verification
+         return user.sendEmailVerification()
+             .then(() => {
 
-        // Check if email already exists
-        const existingAccount = accounts.find(function (user) {
+            // Save the user's name in Firebase
+                 return user.updateProfile({
+                     displayName: name
+                 });
+             })
+             .then(() => {
 
-            return user.email === email;
+            // Keep these for LIBORA's existing session system
+            localStorage.setItem("liboraUser", user.email);
+            localStorage.setItem("liboraUserName", name);
 
+            alert("Account created successfully!");
+
+            // Clear registration form
+            registerForm.reset();
+
+            // Return to login
+            showLogin();
         });
+    })
+    .catch((error) => {
+        console.error("Registration error:", error);
 
-
-        if (existingAccount) {
-
+        if (error.code === "auth/email-already-in-use") {
             alert("An account with this email already exists.");
-
-            return;
+        } else if (error.code === "auth/weak-password") {
+            alert("Password must be at least 6 characters.");
+        } else if (error.code === "auth/invalid-email") {
+            alert("Please enter a valid email address.");
+        } else {
+            alert("Registration failed: " + error.message);
         }
-
-
-        // Create new account
-        const newAccount = {
-
-            name: name,
-
-            email: email,
-
-            password: password
-
-        };
-
-
-        // Add account to accounts list
-        accounts.push(newAccount);
-
-
-        // Save accounts
-        localStorage.setItem(
-            "liboraAccounts",
-            JSON.stringify(accounts)
-        );
-
-
-        alert("Account created successfully!");
-
-
-        // Clear registration form
-        registerForm.reset();
-
-
-        // Return to login
-        showLogin();
+    });
 
     });
 

@@ -47,6 +47,16 @@
                         Login
                     </button>
 
+                    <p class="register-text">
+                        <button
+                            type="button"
+                            class="link-btn"
+                            onclick="showForgotPassword()">
+                            Forgot Password?
+                        </button>
+                    </p>
+                    
+
                 </form>
 
                 <p id="loginMessage"></p>
@@ -142,11 +152,70 @@
                 </p>
 
             </div>
+           <!-- FORGOT PASSWORD SECTION -->
+            <div id="forgotPasswordSection" style="display: none;">
+
+                <h2>Forgot Password?</h2>
+
+                <p class="subtitle">
+                    Enter your email to reset your password
+               </p>
+
+                <form id="forgotPasswordForm">
+
+                    <label for="forgotEmail">Email</label>
+
+                    <input
+                        type="email"
+                        id="forgotEmail"
+                        placeholder="Enter your email"
+                        required
+                    >
+
+                    <button type="submit" class="primary-btn">
+                        Send Reset Link
+                    </button>
+
+                </form>
+
+               <p id="forgotPasswordMessage"></p>
+
+                <p class="register-text">
+
+                Remember your password?
+
+                <button
+                    type="button"
+                    class="link-btn"
+                    onclick="showLogin()">
+                    Back to Login
+                </button>
+
+                </p>
+
+            </div> 
 
         </div>
 
     </div>
 
+
+    <script src="https://www.gstatic.com/firebasejs/12.19.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/12.19.0/firebase-auth-compat.js"></script>
+
+    <script>
+     const firebaseConfig = {
+          apiKey: "AIzaSyBY-B8TtIXknH-9c5GELblJUb5YT4sPYUo",
+          authDomain: "libora-16560.firebaseapp.com",
+         projectId: "libora-16560",
+         storageBucket: "libora-16560.firebasestorage.app",
+         messagingSenderId: "297763382592",
+         appId: "1:297763382592:web:21e81ed1970e68729d86a5"
+     };
+
+      firebase.initializeApp(firebaseConfig);
+       const auth = firebase.auth();
+    </script>
 
     <script src="app.js"></script>
 
