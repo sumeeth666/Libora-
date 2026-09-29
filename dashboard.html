@@ -96,7 +96,23 @@
     </main>
 
 
-    <script src="local-db.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/12.19.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+           apiKey: "AIzaSyBY-B8TtIXknH-9c5GELblJUb5YT4sPYUo",
+            authDomain: "libora-16560.firebaseapp.com",
+           projectId: "libora-16560",
+           storageBucket: "libora-16560.firebasestorage.app",
+           messagingSenderId: "297763382592",
+           appId: "1:297763382592:web:21e81ed1970e68729d86a5"
+     };
+
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
+    </script>
+
     <script src="app.js"></script>
 
 </body>

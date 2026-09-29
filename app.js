@@ -97,20 +97,67 @@ document.addEventListener("DOMContentLoaded", function () {
 // DASHBOARD  (realtime listener on the "seats" collection)
 // =====================================================
 
-function loadDashboard() {
-    unsubscribeSeats = db.collection("seats").onSnapshot(function (snapshot) {
-        const bySeat = {};
-        snapshot.forEach((doc) => { bySeat[doc.id] = doc.data(); });
+async function initializeSeats() {
+    const snapshot = await db.collection("seats").get();
 
-        const now = Date.now();
-        const seats = [];
-        for (let n = 1; n <= TOTAL_SEATS; n++) {
-            seats.push({ number: n, status: effectiveStatus(bySeat[n], now) });
+    const existingSeats = new Set(
+        snapshot.docs.map((doc) => doc.id)
+    );
+
+    const batch = db.batch();
+    let newSeats = 0;
+
+    for (let n = 1; n <= TOTAL_SEATS; n++) {
+        const seatId = String(n);
+
+        if (!existingSeats.has(seatId)) {
+            const ref = db.collection("seats").doc(seatId);
+
+            batch.set(ref, {
+                status: "available"
+            });
+
+            newSeats++;
         }
-        displaySeats(seats);
-    }, function (err) {
-        console.error("Could not load seats:", err);
-    });
+    }
+
+    if (newSeats > 0) {
+        await batch.commit();
+        console.log("Created " + newSeats + " missing seats.");
+    }
+}
+
+
+async function loadDashboard() {
+    try {
+        await initializeSeats();
+
+        unsubscribeSeats = db.collection("seats").onSnapshot(function (snapshot) {
+            const bySeat = {};
+
+            snapshot.forEach((doc) => {
+                bySeat[doc.id] = doc.data();
+            });
+
+            const now = Date.now();
+            const seats = [];
+
+            for (let n = 1; n <= TOTAL_SEATS; n++) {
+                seats.push({
+                    number: n,
+                    status: effectiveStatus(bySeat[n], now)
+                });
+            }
+
+            displaySeats(seats);
+
+        }, function (err) {
+            console.error("Could not load seats:", err);
+        });
+
+    } catch (err) {
+        console.error("Could not initialize seats:", err);
+    }
 }
 
 function displaySeats(seats) {
@@ -371,12 +418,19 @@ async function cancelReservation() {
 // =====================================================
 
 document.addEventListener("click", function (event) {
-    if (event.target.classList.contains("time-btn") && event.target.dataset.time) {
-        startStudyTime(parseInt(event.target.dataset.time));
+
+    const timeButton = event.target.closest(".time-btn");
+
+    if (timeButton && timeButton.dataset.time) {
+        startStudyTime(parseInt(timeButton.dataset.time));
     }
-    if (event.target.classList.contains("extend-btn") && event.target.dataset.extend) {
-        extendStudyTime(parseInt(event.target.dataset.extend));
+
+    const extendButton = event.target.closest(".extend-btn");
+
+    if (extendButton && extendButton.dataset.extend) {
+        extendStudyTime(parseInt(extendButton.dataset.extend));
     }
+
 });
 
 function tickStudyTimer() {
