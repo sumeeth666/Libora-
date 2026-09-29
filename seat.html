@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Libora - Study Time</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header class="dashboard-header">
+
+        <div>
+            <h1>LIBORA</h1>
+            <p>Your Seat, Your Study Time</p>
+        </div>
+
+        <button class="logout-btn" onclick="logout()">
+            Logout
+        </button>
+
+    </header>
+
+
+    <main class="study-page">
+
+        <div class="study-card">
+
+            <h2>Seat <span id="selectedSeat">--</span></h2>
+
+            <p class="study-description">
+                Your seat has been reserved.
+            </p>
+
+            <div class="arrival-box">
+
+                <h3>Reach your seat within</h3>
+
+                <div id="arrivalTimer">
+                    10:00
+                </div>
+
+                <p>
+                    Your reservation will be cancelled
+                    if you don't reach the library in time.
+                </p>
+
+            </div>
+
+
+            <!-- QR scan panel: reused for both arrival check-in and the
+                 mid-study "extend or exit" rescan. Which mode it's in is
+                 set by startQrScan('arrival' | 'extend') in app.js. -->
+            <div id="qrCheckinSection">
+
+                <h2 id="qrCheckinTitle">Scan the QR Code at Your Seat</h2>
+
+                <p id="qrCheckinInstructions">
+                    Confirm you've reached Seat <span id="checkinSeatLabel">--</span>
+                    by scanning the QR code stuck to it.
+                </p>
+
+                <button
+                    id="startScanBtn"
+                    class="time-btn"
+                    onclick="startQrScan('arrival')">
+                    Start Scan
+                </button>
+
+                <div id="qr-reader"></div>
+
+                <p id="checkinStatus"></p>
+
+            </div>
+
+
+            <div id="studySelection" style="display:none;">
+
+                <h2>Choose Your Study Time</h2>
+
+                <p>Select one option:</p>
+
+
+                <div class="time-options">
+
+                    <button class="time-btn" data-time="30">
+                        <strong>30</strong>
+                        <span>Minutes</span>
+                    </button>
+
+
+                    <button class="time-btn" data-time="45">
+                        <strong>45</strong>
+                        <span>Minutes</span>
+                    </button>
+
+
+                    <button class="time-btn" data-time="60">
+                        <strong>1</strong>
+                        <span>Hour</span>
+                    </button>
+
+
+                    <button class="time-btn" data-time="120">
+                        <strong>2</strong>
+                        <span>Hours</span>
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div id="studyTimerSection" style="display:none;">
+
+                <h2>Study Time Remaining</h2>
+
+                <div id="studyTimer">
+                    00:00:00
+                </div>
+
+                <p>
+                    Enjoy your study time!
+                </p>
+
+                <button
+                    id="rescanBtn"
+                    class="time-btn"
+                    onclick="startQrScan('extend')">
+                    Scan Seat to Extend Time
+                </button>
+
+                <button
+                    class="exit-btn"
+                    onclick="exitSeat()">
+                    Exit Seat
+                </button>
+
+            </div>
+
+
+            <!-- >>> NEW: shown after a successful mid-study rescan -->
+            <div id="extendChoiceSection" style="display:none;">
+
+                <h2>Seat Confirmed</h2>
+
+                <p>What would you like to do?</p>
+
+                <button class="time-btn" onclick="showExtendOptions()">
+                    Extend Study Time
+                </button>
+
+                <button class="exit-btn" onclick="exitSeat()">
+                    Exit Seat
+                </button>
+
+                <div id="extendOptions" style="display:none;">
+
+                    <p>Add more time:</p>
+
+                    <div class="time-options">
+
+                        <button class="extend-btn" data-extend="15">
+                            <strong>+15</strong>
+                            <span>Minutes</span>
+                        </button>
+
+                        <button class="extend-btn" data-extend="30">
+                            <strong>+30</strong>
+                            <span>Minutes</span>
+                        </button>
+
+                        <button class="extend-btn" data-extend="45">
+                            <strong>+45</strong>
+                            <span>Minutes</span>
+                        </button>
+
+                        <button class="extend-btn" data-extend="60">
+                            <strong>+60</strong>
+                            <span>Minutes</span>
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <button
+                class="back-btn"
+                onclick="goBackToDashboard()">
+                Back to Seats
+            </button>
+
+        </div>
+
+    </main>
+
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <script src="app.js"></script>
+    
+</body>
+
+</html>

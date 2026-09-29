@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Libora Dashboard</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header class="dashboard-header">
+
+        <div>
+            <h1>LIBORA</h1>
+            <p>Your Seat, Your Study Time</p>
+        </div>
+
+        <button onclick="logout()" class="logout-btn">
+            Logout
+        </button>
+
+    </header>
+
+
+    <main class="dashboard">
+
+        <section class="welcome-card">
+
+            <h2 id="welcomeMessage">
+                Welcome to Libora!
+            </h2>
+
+            <p>
+                Choose your seat and start your study journey.
+            </p>
+
+        </section>
+
+
+        <section class="stats">
+
+            <div class="stat-card">
+                <h3>Total Seats</h3>
+                <strong id="totalSeats">50</strong>
+            </div>
+
+            <div class="stat-card available-card">
+                <h3>Available</h3>
+                <strong id="availableSeats">50</strong>
+            </div>
+
+            <div class="stat-card reserved-card">
+                <h3>Reserved</h3>
+                <strong id="reservedSeats">0</strong>
+            </div>
+
+            <div class="stat-card occupied-card">
+                <h3>Occupied</h3>
+                <strong id="occupiedSeats">0</strong>
+            </div>
+
+        </section>
+
+
+        <section class="seat-section">
+
+            <h2>Choose Your Seat</h2>
+
+            <div class="legend">
+
+                <span>
+                    <i class="legend-box available"></i>
+                    Available
+                </span>
+
+                <span>
+                    <i class="legend-box reserved"></i>
+                    Reserved
+                </span>
+
+                <span>
+                    <i class="legend-box occupied"></i>
+                    Occupied
+                </span>
+
+            </div>
+
+            <div id="seatGrid" class="seat-grid"></div>
+
+        </section>
+
+    </main>
+
+
+    <script src="local-db.js"></script>
+    <script src="app.js"></script>
+
+</body>
+
+</html>
