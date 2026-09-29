@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Libora - Login</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="login-container">
+
+        <div class="logo-section">
+            <h1>LIBORA</h1>
+            <p>Your Seat, Your Study Time</p>
+        </div>
+
+        <div class="login-box">
+
+            <h2>Welcome Back</h2>
+            <p class="subtitle">Login to reserve your library seat</p>
+
+            <form id="loginForm">
+
+                <label for="email">Email</label>
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Enter your email"
+                    required
+                >
+
+                <label for="password">Password</label>
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Enter your password"
+                    required
+                >
+
+                <button type="submit" class="primary-btn">
+                    Login
+                </button>
+
+            </form>
+
+            <p id="loginMessage"></p>
+
+            <div class="divider">
+                <span>OR</span>
+            </div>
+
+            <p class="register-text">
+                New to Libora?
+                <button
+                    type="button"
+                    class="link-btn"
+                    onclick="showRegister()"
+                >
+                    Create Account
+                </button>
+            </p>
+
+        </div>
+
+    </div>
+
+    <script src="app.js"></script>
+
+</body>
+</html>
