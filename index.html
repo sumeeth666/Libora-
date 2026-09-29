@@ -19,53 +19,134 @@
 
         <div class="login-box">
 
-            <h2>Welcome Back</h2>
-            <p class="subtitle">Login to reserve your library seat</p>
+            <!-- LOGIN SECTION -->
+            <div id="loginSection">
 
-            <form id="loginForm">
+                <h2>Welcome Back</h2>
+                <p class="subtitle">Login to reserve your library seat</p>
 
-                <label for="email">Email</label>
-                <input
-                    type="email"
-                    id="email"
-                    placeholder="Enter your email"
-                    required
-                >
+                <form id="loginForm">
 
-                <label for="password">Password</label>
-                <input
-                    type="password"
-                    id="password"
-                    placeholder="Enter your password"
-                    required
-                >
+                    <label for="email">Email</label>
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="Enter your email"
+                        required
+                    >
 
-                <button type="submit" class="primary-btn">
-                    Login
-                </button>
+                    <label for="password">Password</label>
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Enter your password"
+                        required
+                    >
 
-            </form>
+                    <button type="submit" class="primary-btn">
+                        Login
+                    </button>
 
-            <p id="loginMessage"></p>
+                </form>
 
-            <div class="divider">
-                <span>OR</span>
+                <p id="loginMessage"></p>
+
+                <div class="divider">
+                    <span>OR</span>
+                </div>
+
+                <p class="register-text">
+                    New to Libora?
+
+                    <button
+                        type="button"
+                        class="link-btn"
+                        onclick="showRegister()">
+                        Create Account
+                    </button>
+                </p>
+
             </div>
 
-            <p class="register-text">
-                New to Libora?
-                <button
-                    type="button"
-                    class="link-btn"
-                    onclick="showRegister()"
-                >
-                    Create Account
-                </button>
-            </p>
+
+            <!-- CREATE ACCOUNT SECTION -->
+            <div id="registerSection" style="display: none;">
+
+                <h2>Create Account</h2>
+
+                <p class="subtitle">
+                    Create your Libora account
+                </p>
+
+                <form id="registerForm">
+
+                    <label for="registerName">Full Name</label>
+
+                    <input
+                        type="text"
+                        id="registerName"
+                        placeholder="Enter your full name"
+                        required
+                    >
+
+
+                    <label for="registerEmail">Email</label>
+
+                    <input
+                        type="email"
+                        id="registerEmail"
+                        placeholder="Enter your email"
+                        required
+                    >
+
+
+                    <label for="registerPassword">Password</label>
+
+                    <input
+                        type="password"
+                        id="registerPassword"
+                        placeholder="Create a password"
+                        required
+                    >
+
+
+                    <label for="confirmPassword">Confirm Password</label>
+
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        placeholder="Confirm your password"
+                        required
+                    >
+
+
+                    <button type="submit" class="primary-btn">
+                        Create Account
+                    </button>
+
+                </form>
+
+                <p id="registerMessage"></p>
+
+                <p class="register-text">
+
+                    Already have an account?
+
+                    <button
+                        type="button"
+                        class="link-btn"
+                        onclick="showLogin()">
+                        Login
+                    </button>
+
+                </p>
+
+            </div>
 
         </div>
 
     </div>
+
 
     <script src="app.js"></script>
 

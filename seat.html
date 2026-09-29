@@ -52,7 +52,33 @@
             </div>
 
 
-            <div id="studySelection">
+            <!-- QR scan panel: reused for both arrival check-in and the
+                 mid-study "extend or exit" rescan. Which mode it's in is
+                 set by startQrScan('arrival' | 'extend') in app.js. -->
+            <div id="qrCheckinSection">
+
+                <h2 id="qrCheckinTitle">Scan the QR Code at Your Seat</h2>
+
+                <p id="qrCheckinInstructions">
+                    Confirm you've reached Seat <span id="checkinSeatLabel">--</span>
+                    by scanning the QR code stuck to it.
+                </p>
+
+                <button
+                    id="startScanBtn"
+                    class="time-btn"
+                    onclick="startQrScan('arrival')">
+                    Start Scan
+                </button>
+
+                <div id="qr-reader"></div>
+
+                <p id="checkinStatus"></p>
+
+            </div>
+
+
+            <div id="studySelection" style="display:none;">
 
                 <h2>Choose Your Study Time</h2>
 
@@ -102,10 +128,65 @@
                 </p>
 
                 <button
+                    id="rescanBtn"
+                    class="time-btn"
+                    onclick="startQrScan('extend')">
+                    Scan Seat to Extend Time
+                </button>
+
+                <button
                     class="exit-btn"
                     onclick="exitSeat()">
                     Exit Seat
                 </button>
+
+            </div>
+
+
+            <!-- >>> NEW: shown after a successful mid-study rescan -->
+            <div id="extendChoiceSection" style="display:none;">
+
+                <h2>Seat Confirmed</h2>
+
+                <p>What would you like to do?</p>
+
+                <button class="time-btn" onclick="showExtendOptions()">
+                    Extend Study Time
+                </button>
+
+                <button class="exit-btn" onclick="exitSeat()">
+                    Exit Seat
+                </button>
+
+                <div id="extendOptions" style="display:none;">
+
+                    <p>Add more time:</p>
+
+                    <div class="time-options">
+
+                        <button class="extend-btn" data-extend="15">
+                            <strong>+15</strong>
+                            <span>Minutes</span>
+                        </button>
+
+                        <button class="extend-btn" data-extend="30">
+                            <strong>+30</strong>
+                            <span>Minutes</span>
+                        </button>
+
+                        <button class="extend-btn" data-extend="45">
+                            <strong>+45</strong>
+                            <span>Minutes</span>
+                        </button>
+
+                        <button class="extend-btn" data-extend="60">
+                            <strong>+60</strong>
+                            <span>Minutes</span>
+                        </button>
+
+                    </div>
+
+                </div>
 
             </div>
 
@@ -120,9 +201,9 @@
 
     </main>
 
-
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <script src="app.js"></script>
-
+    
 </body>
 
 </html>

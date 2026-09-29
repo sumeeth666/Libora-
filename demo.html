@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>College Course Registration</title>
+</head>
+
+<body>
+
+    <center>
+        <h1>ABC College of Engineering</h1>
+        <h2>Department of Computer Science and Engineering</h2>
+        <h3>Student Course Registration</h3>
+
+        <p>
+            Welcome to the <b>College Course Registration Portal</b>.
+            Please fill in the details carefully to register for your desired course.
+        </p>
+
+        <p>
+            <b><i><u>Registration is open now!</u></i></b>
+        </p>
+
+        <p>
+            <span><b>Registration Deadline: 9 October 2026</b></span>
+        </p>
+    </center>
+
+    <hr>
+
+    <marquee>
+        <b>Course Registration Open – Register Before the Deadline!</b>
+    </marquee>
+
+    <hr>
+
+    <!-- College Logo -->
+    <center>
+        <img src="college-logo.png"
+             alt="College Logo"
+             width="150"
+             height="150"
+             align="center">
+    </center>
+
+    <form action="success.html" method="get" target="_blank">
+
+        <fieldset>
+            <legend><b>Student Information</b></legend>
+
+            <label>Roll Number:</label>
+            <input type="text"
+                   name="rollno"
+                   maxlength="10"
+                   placeholder="Enter Roll Number"
+                   autofocus
+                   required>
+            <br><br>
+
+            <label>Student Name:</label>
+            <input type="text"
+                   name="name"
+                   maxlength="30"
+                   placeholder="Enter Student Name"
+                   required>
+            <br><br>
+
+            <label>Date of Birth:</label>
+            <input type="date"
+                   name="dob"
+                   required>
+            <br><br>
+
+            <label>Email ID:</label>
+            <input type="email"
+                   name="email"
+                   placeholder="Enter Email ID"
+                   required>
+            <br><br>
+
+            <label>Mobile Number:</label>
+            <input type="tel"
+                   name="mobile"
+                   maxlength="10"
+                   placeholder="Enter 10-digit Mobile Number"
+                   required>
+            <br><br>
+
+            <label>Gender:</label>
+            <input type="radio" name="gender" value="Male" required>
+            Male
+
+            <input type="radio" name="gender" value="Female">
+            Female
+
+            <input type="radio" name="gender" value="Other">
+            Other
+            <br><br>
+
+            <label>Password:</label>
+            <input type="password"
+                   name="password"
+                   placeholder="Enter Password"
+                   required>
+            <br><br>
+
+            <label>Confirm Password:</label>
+            <input type="password"
+                   name="confirmPassword"
+                   placeholder="Confirm Password"
+                   required>
+            <br><br>
+
+            <label>City:</label>
+            <input type="text"
+                   name="city"
+                   placeholder="Enter City"
+                   required>
+            <br><br>
+
+            <label>Address:</label><br>
+            <textarea name="address"
+                      rows="4"
+                      cols="40"
+                      placeholder="Enter your address"
+                      required></textarea>
+
+        </fieldset>
+
+        <br>
+
+        <fieldset>
+            <legend><b>Department Selection</b></legend>
+
+            <input type="radio" name="department" value="CSE" required>
+            CSE
+
+            <input type="radio" name="department" value="ISE">
+            ISE
+
+            <input type="radio" name="department" value="E&C">
+            E&C
+
+            <input type="radio" name="department" value="AIML">
+            AIML
+        </fieldset>
+
+        <br>
+
+        <fieldset>
+            <legend><b>Technical Skills</b></legend>
+
+            <ol>
+                <li>HTML</li>
+                <li>CSS</li>
+                <li>Java</li>
+                <li>Python</li>
+                <li>JavaScript</li>
+            </ol>
+
+        </fieldset>
+
+        <br>
+
+        <h3>Event Schedule</h3>
+
+        <table border="1" cellpadding="10" cellspacing="0">
+            <tr>
+                <th>Course/Event</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Venue</th>
+                <th>Registration Fee</th>
+            </tr>
+
+            <tr>
+                <td>Web Development</td>
+                <td>10 Oct</td>
+                <td>10:00 AM</td>
+                <td>Lab 1</td>
+                <td>₹100</td>
+            </tr>
+
+            <tr>
+                <td>Python Programming</td>
+                <td>11 Oct</td>
+                <td>11:00 AM</td>
+                <td>Lab 2</td>
+                <td>₹100</td>
+            </tr>
+
+            <tr>
+                <td>Database Systems</td>
+                <td>12 Oct</td>
+                <td>9:00 AM</td>
+                <td>Lab 3</td>
+                <td>₹150</td>
+            </tr>
+
+            <tr>
+                <td>Cloud Computing</td>
+                <td>13 Oct</td>
+                <td>2:00 PM</td>
+                <td>Seminar Hall</td>
+                <td>₹200</td>
+            </tr>
+        </table>
+
+        <br>
+
+        <h3>Student Declaration</h3>
+
+        <pre>
+I hereby declare that the information provided by me is true
+and correct to the best of my knowledge.
+
+I agree to follow all the rules and regulations of the college.
+        </pre>
+
+        <h3>College Contact Information</h3>
+
+        <address>
+            ABC College of Engineering,<br>
+            Bengaluru, Karnataka, India.<br>
+            Phone: +91 9876543210<br>
+            Email: college@example.com
+        </address>
+
+        <br>
+
+        <p>
+            <a href="https://www.example.com" target="_blank">
+                Visit College Website
+            </a>
+        </p>
+
+        <br>
+
+        <center>
+            <input type="submit" value="Submit">
+            <input type="reset" value="Reset">
+        </center>
+
+    </form>
+
+</body>
+</html>
